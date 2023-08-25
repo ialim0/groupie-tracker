@@ -1,0 +1,9 @@
+{{template "base"}}
+{{define "content"}}
+    <div class="error">
+        <h1 class="error-code">{{.ErrorStruct.ErrorName}}</h1>
+        <h2 class="error-message">Oops! Something went wrong.</h2>
+        <p class="error-description">{{.ErrorStruct.ErrorMessage}}.</p>
+        <button class="return-home" onclick="window.location.href = '/';">Return to Home Page</button>
+    </div>
+{{end}}

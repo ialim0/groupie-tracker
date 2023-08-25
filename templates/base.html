@@ -1,0 +1,48 @@
+{{define "base"}}
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <base href="/">
+        <link rel="stylesheet" href="/statics/styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <title>GROUPIE-TRACKER</title>
+    </head>
+    <body>
+            <nav class="navbar">
+                <h4 class="navbar-brand"><a href="/" style="color: white;">Groupie Tracker</a></h4>
+                <input type="checkbox" id="navbar-toggle" class="navbar-toggle" hidden>
+                <label for="navbar-toggle" class="navbar-toggle-label">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+                <ul class="navbar-menu" id="navbar-menu">
+                    <li><a href="/dates/">Date</a></li>
+                    <li><a href="/locations/" >Location</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+            </nav>
+        <main>
+            {{template "content" .}}
+        </main>
+        <footer>
+            <p>&copy; 2023 Work done by @passar @ialimoud and @addiedhiou. All rights reserved.</p>
+        </footer>
+
+        <script>
+            const menuToggle = document.querySelector(".menu-toggle");
+            const navLinks = document.querySelector(".nav-links");
+    
+            menuToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    navLinks.classList.add('show');
+                } else {
+                    navLinks.classList.remove('show');
+                }
+                });
+    
+        </script>
+    </body>
+</html>
+{{end}}

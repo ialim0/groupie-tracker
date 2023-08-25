@@ -1,0 +1,23 @@
+{{template "base"}}
+{{define "content"}}
+    <ul class="card-list">
+      {{range .Artists}}
+      <li class="card">
+        <div class="card-image">
+          <img src="{{.Image}}" alt="{{.Name}} Image">
+        </div>
+        <div class="card-content">
+          <h2 class="card-title">{{.Name}}</h2>
+          <p class="card-members"><span class="text-title">Members:</span> <br><br> {{range .Members}}{{.}}, {{end}}</p>
+          <p class="card-creation-date"><span class="text-title">Creation Date:</span> {{.CreationDate}}</p>
+          <p class="card-first-album"><span class="text-title">First Album:</span> {{.FirstAlbum}}</p>
+          <div class="buttons-container">
+            <button class="button wow-effect" onclick="location.href='/location/{{.ID}}'">Locations</button>
+            <button class="button wow-effect" onclick="location.href='/date/{{.ID}}'">Dates</button>
+            <button class="button wow-effect" onclick="location.href='/relation/{{.ID}}'">Relations</button>
+          </div>
+        </div>
+      </li>
+      {{end}}
+    </ul>
+ {{end}}

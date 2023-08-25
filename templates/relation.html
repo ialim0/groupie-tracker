@@ -1,0 +1,17 @@
+{{template "base"}}
+{{define "content"}}
+    <h1>{{.Name}}</h1>
+    <img class="details-img" src="{{.Image}}" alt="{{.Name}} Image">
+    <div>
+        <h1>Location and Date</h1>
+    </div>
+
+    <div class="details-container">
+        {{range .LocationDates}}
+        <div class="event">
+            <div class="event-data">{{ .Location }}</div>
+            <div class="event-data">{{ .Date }}</div>
+        </div>
+        {{end}}
+    </div>
+{{end}}

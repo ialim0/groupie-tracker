@@ -1,0 +1,18 @@
+{{template "base"}}
+{{define "content"}}
+    <div class="Date-container">
+        <h1>Locations List</h1>
+        <ul class="card-list">
+            {{range .LocationList.ListOfLocation}}
+            <li class="card">
+                <div class="card-content">
+                    <div class="texte-title">
+                        <p>{{.}}</p>
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                </div>
+            </li>
+            {{end}}
+        </ul>
+    </div>
+{{end}}

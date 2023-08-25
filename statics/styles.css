@@ -1,0 +1,485 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+  }
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-top: 30px;
+  }
+  main {
+    margin-bottom: 7vh;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 50px;
+  }
+  .card-list {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0;
+  }
+  .card {
+    flex: 1 0 calc(33.33% - 20px);
+    margin: 20px;
+    max-width: 300px;
+    background-color: #333;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  .card:hover {
+    transform: scale(1.05);
+  }
+  .card-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px 10px 0 0;
+  }
+  .card-content {
+    padding: 20px;
+  }
+  .card-title {
+    margin-top: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+  }
+  .text-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 10px;
+    /* padding-bottom: 5px; */
+    border-bottom: 2px solid #fff;
+  }
+  .card-members,
+  .card-creation-date,
+  .card-first-album {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+  .navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+  }
+  .navbar-menu {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  .navbar-menu li {
+    margin-left: 20px;
+  }
+  .navbar-menu a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .navbar-menu a:hover {
+    color: #f00;
+  }
+  .dropdown {
+    position: relative;
+  }
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+  }
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+  .dropdown-menu li {
+    margin-bottom: 5px;
+  }
+  .dropdown-menu a {
+    color: #fff;
+    text-decoration: none;
+  }
+  footer {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+  .footer p {
+    color: #fff;
+    margin: 0;
+  }
+  .button {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #fff;
+    background-color: #E50914;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+    white-space: nowrap;
+  }
+  .wow-effect {
+    transition: transform 0.3s;
+  }
+  .wow-effect:hover,
+  .wow-effect:focus {
+    transform: scale(1.2);
+  }
+  .button:last-child {
+    margin-right: 0;
+  }
+  .buttons-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 767px) {
+    .navbar-menu {
+      display: none;
+    }
+    .navbar-menu.show {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .navbar-toggle {
+      display: block;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 2;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .navbar-toggle-label {
+      display: block;
+      width: 30px;
+      height: 20px;
+      position: relative;
+      cursor: pointer;
+    }
+    .navbar-toggle-label span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background-color: #fff;
+      position: absolute;
+      left: 0;
+      transition: transform 0.3s ease;
+    }
+    .navbar-toggle-label span:nth-child(1) {
+      top: 0;
+    }
+    .navbar-toggle-label span:nth-child(2),
+    .navbar-toggle-label span:nth-child(3) {
+      top: 9px;
+    }
+    .navbar-toggle:checked ~ .navbar-menu {
+      display: flex;
+    }
+    .navbar-toggle:checked ~ .navbar-toggle-label span:nth-child(1) {
+      transform: translateY(9px) rotate(45deg);
+    }
+    .navbar-toggle:checked ~ .navbar-toggle-label span:nth-child(2) {
+      opacity: 0;
+    }
+    .navbar-toggle:checked ~ .navbar-toggle-label span:nth-child(3) {
+      transform: translateY(-9px) rotate(-45deg);
+    }
+    .card {
+      flex-basis: 100%;
+    }
+  }
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .card {
+      flex-basis: calc(50% - 20px);
+    }
+  }
+  @media (min-width: 1024px) {
+    .card {
+      flex-basis: calc(33.33% - 20px);
+    }
+  }  
+
+  /* error style */
+  .error{
+    padding-top: 10vh;
+    position: relative;
+    align-items: center !important;
+    display: flex;
+    flex-direction: column;
+  }
+  
+
+  .error-code{
+    font-size: 100px;
+    font-weight: 700;
+    color: #E50914;
+    margin: 0;
+  }
+
+  .error-message {
+    font-size: 20px;
+    font-weight: 500;
+    color: #FFF;
+    margin: 0;
+}
+.error-description {
+    font-size: 15px;
+    color: #FFF;
+    margin-top: 20px;
+}
+.return-home {
+    margin: 30px;
+    background-color: #E50914;
+    color: white;
+    border: none;
+    padding: 20px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.return-home:hover {
+    background-color: #B80A0E;
+}
+
+
+/* About style */
+/* Styling for the about header section */
+.about-header {
+  padding: 80px 0;
+  background-image: url('path/to/netflix-background.jpg');
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+}
+.about-header h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.about-header p {
+  font-size: 24px;
+  font-weight: 400;
+}
+/* Styling for the about team section */
+.about-team {
+  padding: 60px 0;
+  text-align: center;
+}
+.about-team h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 40px;
+}
+.team-member {
+  display: inline-block;
+  margin: 20px;
+}
+.team-member h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 10px;
+}
+.team-member p {
+  font-size: 20px;
+  font-weight: 400;
+  margin-top: 5px;
+}
+
+/* Dates styles */
+
+.Date-container{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.Date-container h1{
+  font-size: 36px;
+  margin-bottom: 30px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.Date-container .card-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 30px;
+        list-style: none;
+        padding: 0;
+    }
+    .Date-container .card {
+        background-color: #222;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease;
+    }
+    .Date-container .card:hover {
+        transform: translateY(-5px);
+    }
+    .Date-container .card-content {
+        padding: 20px;
+    }
+    .Date-container .texte-title {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        overflow: hidden;
+        word-wrap: break-word;
+    }
+    .Date-container .texte-title a {
+        text-decoration: none;
+        color: #fff;
+        display: block;
+        padding: 10px 0;
+    }
+    .Date-container .texte-title a:hover {
+        color: #ff3333;
+    }
+    @media screen and (max-width: 768px) {
+        .Date-container .card-list {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .Date-container .texte-title {
+            font-size: 20px;
+        }
+    }
+
+    /* details style */
+    .details-container{
+      max-width: 800px;
+      margin: 20px auto;
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+      gap: 20px; /* Add gap between grid items */
+      justify-content: center;
+    }
+
+    .details-container h1 {
+      font-size: 1.2em;
+      justify-content: space-between;
+      background-color: #E50914;
+      color: #fff;
+      font-weight: bold;
+      text-transform: uppercase;
+      padding: 10px;
+      text-align: center;
+      max-width: max-content;
+      text-align: center;
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      margin: 0 auto; 
+      
+    }
+
+    /* On medium screens, show one element per row */
+@media screen and (max-width: 768px) {
+  .details-container .container {
+      grid-template-columns: 1fr; /* One item per row */
+  }
+}
+/* On small screens, show one element per row */
+@media screen and (max-width: 480px) {
+  .details-container .container {
+      grid-template-columns: 1fr; /* One item per row */
+  }
+}
+.details-container .event {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+  border: 1px solid #fff;
+  background-color: #333;
+  position: relative;
+  overflow: hidden;
+}
+.details-container .event-header {
+  justify-content: space-between;
+  background-color: #E50914;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 10px;
+  text-align: center;
+}
+.details-container .event-data {
+  flex: 1;
+  text-align: center;
+  width: 100%;
+}
+.details-img {
+  max-width: 100%;
+  display: block;
+  margin: 20px auto;
+  border-radius: 50%;
+  transition: transform 0.5s ease;
+}
+.details-container img:hover {
+  transform: rotateY(180deg);
+}
+/* Added CSS for the animated mouse cursor */
+.details-container .event:hover::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: -25px;
+  width: 50px;
+  height: 50px;
+  background-color: #fff; /* Replace with the background color or image of your cursor */
+  border-radius: 50%;
+  animation: mouseAnimation 1s infinite;
+}
+@keyframes mouseAnimation {
+  0%, 100% {
+      transform: translateY(-50%);
+  }
+  50% {
+      transform: translateY(-70%);
+  }
+}

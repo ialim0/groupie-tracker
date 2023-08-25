@@ -1,0 +1,15 @@
+{{template "base"}}
+{{define "content"}}
+    <h1>{{.Name}}</h1>
+    <img class="details-img" src="{{.Image}}" alt="{{.Name}} Image">
+    <div >
+        <h1>Dates artist have already played</h1>
+    </div>
+    <div class="details-container">
+        {{range .DateData.Dates}}
+        <div class="event">
+            <div class="event-data">{{.}}</div>
+        </div>
+        {{end}}
+    </div>
+{{end}}

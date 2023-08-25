@@ -18,9 +18,9 @@
                     <span></span>
                 </label>
                 <ul class="navbar-menu" id="navbar-menu">
-                    <li><a href="/dates/">Date</a></li>
-                    <li><a href="/locations/" >Location</a></li>
-                    <li><a href="/about">About</a></li>
+                    <li><a class="nav-links" href="/dates/">Date</a></li>
+                    <li><a class="nav-links" href="/locations/" >Location</a></li>
+                    <li><a class="nav-links" href="/about">About</a></li>
                 </ul>
             </nav>
         <main>
@@ -31,7 +31,7 @@
         </footer>
 
         <script>
-            const menuToggle = document.querySelector(".menu-toggle");
+            const menuToggle = document.querySelector(".navbar-menu");
             const navLinks = document.querySelector(".nav-links");
     
             menuToggle.addEventListener('change', function() {

@@ -13,11 +13,27 @@ var allocation help.AllLocationIndex
 var alldate help.AllDatesIndex
 var templates map[string]*template.Template
 
+var paths = []string{
+	"/",
+	"/location/",
+	"/date/",
+	"/relation/",
+	"/locations/",
+	"/locations-artist/",
+	"/dates/",
+	"/dates-artist/",
+	"/about/",
+	"/contact/",
+	"/artists/",
+}
+
+
 func init() {
 	if templates == nil {
 		templates = make(map[string]*template.Template)
 	}
-	templates["index"] = template.Must(template.ParseFiles("./templates/index.html", "./templates/base.html"))
+	templates["artists"] = template.Must(template.ParseFiles("./templates/artists.html", "./templates/base.html"))
+	templates["home"] = template.Must(template.ParseFiles("./templates/home.html", "./templates/base.html"))
 	templates["about"] = template.Must(template.ParseFiles("./templates/about.html", "./templates/base.html"))
 	templates["dates"] = template.Must(template.ParseFiles("./templates/dates.html", "./templates/base.html"))
 	templates["date"] = template.Must(template.ParseFiles("./templates/date.html", "./templates/base.html"))
@@ -39,21 +55,23 @@ func RenderTemplate(w http.ResponseWriter, name string, templateName string, vie
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
+	if !help.IsMatch(r.URL.Path, paths) {
+		w.WriteHeader(404)
+		ErrMessage := help.ErrorStruct{
+			ErrorName:    "404",
+			ErrorMessage: "The page you are looking for cannot be found. It might have been moved or doesn't exist. ",
+		}
+		context := help.Context{
+			ErrorStruct: ErrMessage,
+		}
+		RenderTemplate(w, "error", "base", context)
+		return
 
-	paths := []string{
-		"/",
-		"/location/",
-		"/date/",
-		"/relation/",
-		"/locations/",
-		"/locations-artist/",
-		"/dates/",
-		"/dates-artist/",
-		"/about/",
-		"/contact/",
-		"/artists",
 	}
+	RenderTemplate(w, "home", "base", nil)
+}
 
+func Artists(w http.ResponseWriter, r *http.Request) {
 	if !help.IsMatch(r.URL.Path, paths) {
 
 		w.WriteHeader(404)
@@ -64,10 +82,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(404)
 		RenderTemplate(w, "error", "base", context)
 		return
-
 	}
 
 	// Fetch artists data
@@ -83,32 +99,16 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(500)
 		RenderTemplate(w, "error", "base", context)
 		return
 	}
-
 	context := help.Context{
 		Artists: artists,
 	}
-
-	RenderTemplate(w, "index", "base", context)
+	RenderTemplate(w, "artists", "base", context)
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
-
-	paths := []string{
-		"/",
-		"/location/",
-		"/date/",
-		"/relation/",
-		"/locations/",
-		"/locations-artist/",
-		"/dates/",
-		"/dates-artist/",
-		"/about/",
-		"/contact/",
-	}
 
 	if !help.IsMatch(r.URL.Path, paths) {
 
@@ -120,29 +120,14 @@ func About(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(404)
 		RenderTemplate(w, "error", "base", context)
 		return
-
 	}
 	context := help.Context{}
 	RenderTemplate(w, "about", "base", context)
 }
 
 func Dates(w http.ResponseWriter, r *http.Request) {
-	paths := []string{
-		"/",
-		"/location/",
-		"/date/",
-		"/relation/",
-		"/locations/",
-		"/locations-artist/",
-		"/dates/",
-		"/dates-artist/",
-		"/about/",
-		"/contact/",
-	}
-
 	if !help.IsMatch(r.URL.Path, paths) {
 
 		w.WriteHeader(404)
@@ -153,10 +138,8 @@ func Dates(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(404)
 		RenderTemplate(w, "error", "base", context)
 		return
-
 	}
 	// Fetch artists data
 	artistsURL := "https://groupietrackers.herokuapp.com/api/artists"
@@ -175,7 +158,6 @@ func Dates(w http.ResponseWriter, r *http.Request) {
 		RenderTemplate(w, "error", "base", context)
 		return
 	}
-
 	// Fetch alldate data
 	err = help.FetchDataFromAPI("https://groupietrackers.herokuapp.com/api/dates", &alldate)
 	if err != nil {
@@ -187,11 +169,9 @@ func Dates(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(500)
 		RenderTemplate(w, "error", "base", context)
 		return
 	}
-
 	// Process data and render template
 	uniqueDates := make(map[string][]int)
 	for _, entry := range alldate.AllDatesIndex {
@@ -199,7 +179,6 @@ func Dates(w http.ResponseWriter, r *http.Request) {
 			uniqueDates[date] = append(uniqueDates[date], entry.ID)
 		}
 	}
-
 	var dateList help.DateList
 	for date, artistIDs := range uniqueDates {
 		var tab []help.Artists
@@ -209,25 +188,20 @@ func Dates(w http.ResponseWriter, r *http.Request) {
 		}
 		dateList.ListOfArtist = append(dateList.ListOfArtist, tab)
 	}
-
 	trimDateStruct := help.DateList{
 		ListOfDate:   help.TrimStart(dateList.ListOfDate),
 		ListOfArtist: dateList.ListOfArtist,
 	}
-
 	context := help.Context{
 		DateList: trimDateStruct,
 	}
-
 	RenderTemplate(w, "dates", "base", context)
 }
 
 func Date(w http.ResponseWriter, r *http.Request) {
 	// Récupérer l'ID de la location depuis l'URL
 	id := r.URL.Path[len("/date/"):]
-
 	intid, _ := strconv.Atoi(id)
-
 	if intid <= 0 || intid > 52 {
 		w.WriteHeader(404)
 		ErrMessage := help.ErrorStruct{
@@ -237,12 +211,9 @@ func Date(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(404)
 		RenderTemplate(w, "error", "base", context)
 		return
-
 	}
-
 	// Fetch dates data
 	datesURL := fmt.Sprintf("https://groupietrackers.herokuapp.com/api/dates/%s", id)
 	var datesData help.DateData
@@ -256,7 +227,6 @@ func Date(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(500)
 		RenderTemplate(w, "error", "base", context)
 		return
 	}
@@ -274,46 +244,26 @@ func Date(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(500)
 		RenderTemplate(w, "error", "base", context)
 		return
 	}
-
 	// Process data and render template
 	n := datesData.ID - 1
-
 	artist := artists[n]
 	trimeDateStruct := help.DateData{
 		ID:    datesData.ID,
 		Dates: help.TrimStart(datesData.Dates),
 	}
-
 	context := help.Context{
 		DateData: trimeDateStruct,
 		Image:    artist.Image,
 		Name:     artist.Name,
 	}
-
 	RenderTemplate(w, "date", "base", context)
 }
 
 func Locations(w http.ResponseWriter, r *http.Request) {
-
-	paths := []string{
-		"/",
-		"/location/",
-		"/date/",
-		"/relation/",
-		"/locations/",
-		"/locations-artist/",
-		"/dates/",
-		"/dates-artist/",
-		"/about/",
-		"/contact/",
-	}
-
 	if !help.IsMatch(r.URL.Path, paths) {
-
 		w.WriteHeader(404)
 		ErrMessage := help.ErrorStruct{
 			ErrorName:    "404",
@@ -322,10 +272,8 @@ func Locations(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(404)
 		RenderTemplate(w, "error", "base", context)
 		return
-
 	}
 	// Fetch artists data
 	artistsURL := "https://groupietrackers.herokuapp.com/api/artists"
@@ -340,11 +288,9 @@ func Locations(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(500)
 		RenderTemplate(w, "error", "base", context)
 		return
 	}
-
 	// Fetch allocation data
 	err = help.FetchDataFromAPI("https://groupietrackers.herokuapp.com/api/locations", &allocation)
 	if err != nil {
@@ -356,11 +302,9 @@ func Locations(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(500)
 		RenderTemplate(w, "error", "base", context)
 		return
 	}
-
 	// Process data and render template
 	uniqueLocations := make(map[string][]int)
 	for _, entry := range allocation.AllLocationIndex {
@@ -369,7 +313,6 @@ func Locations(w http.ResponseWriter, r *http.Request) {
 			uniqueLocations[location] = append(uniqueLocations[location], entry.ID)
 		}
 	}
-
 	var locationList help.LocationList
 	for location, artistIDs := range uniqueLocations {
 		var tab []help.Artists
@@ -379,16 +322,13 @@ func Locations(w http.ResponseWriter, r *http.Request) {
 		}
 		locationList.ListOfArtist = append(locationList.ListOfArtist, tab)
 	}
-
 	context := help.Context{
 		LocationList: locationList,
 	}
-
 	RenderTemplate(w, "locations", "base", context)
 }
 
 func Location(w http.ResponseWriter, r *http.Request) {
-
 	// Récupérer l'ID de la location depuis l'URL
 	id := r.URL.Path[len("/location/"):]
 	intid, _ := strconv.Atoi(id)
@@ -401,13 +341,9 @@ func Location(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(404)
 		RenderTemplate(w, "error", "base", context)
-		//help.RenderTemplate(w, context, "templates/error.html")
 		return
-
 	}
-
 	// Fetch location data
 	locationURL := fmt.Sprintf("https://groupietrackers.herokuapp.com/api/locations/%s", id)
 	var locationData help.LocationData
@@ -421,13 +357,9 @@ func Location(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(404)
 		RenderTemplate(w, "error", "base", context)
-		//help.RenderTemplate(w, context, "templates/error.html")
 		return
-
 	}
-
 	// Fetch artists data
 	artistsURL := "https://groupietrackers.herokuapp.com/api/artists"
 	var artists []help.Artists
@@ -441,18 +373,13 @@ func Location(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(500)
 		RenderTemplate(w, "error", "base", context)
 		//help.RenderTemplate(w, context, "templates/error.html")
 		return
-
 	}
-
 	// Process data and render template
 	n := locationData.ID - 1
-
 	artist := artists[n]
-
 	context := help.Context{
 		Artists:      artists,
 		LocationData: locationData,
@@ -476,18 +403,14 @@ func Relation(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(404)
 		RenderTemplate(w, "error", "base", context)
 		return
-
 	}
 	// Fetch relations data
 	relationURL := fmt.Sprintf("https://groupietrackers.herokuapp.com/api/relation/%s", id)
 	var relationData help.RelationsData
 	err := help.FetchDataFromAPI(relationURL, &relationData)
-
 	var locationDates []help.LocationDate
-
 	for location, dates := range relationData.DatesLocations {
 		for _, date := range dates {
 			locationDate := help.LocationDate{
@@ -497,7 +420,6 @@ func Relation(w http.ResponseWriter, r *http.Request) {
 			locationDates = append(locationDates, locationDate)
 		}
 	}
-
 	if err != nil {
 		w.WriteHeader(500)
 		ErrMessage := help.ErrorStruct{
@@ -507,11 +429,9 @@ func Relation(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(500)
 		RenderTemplate(w, "error", "base", context)
 		return
 	}
-
 	// Fetch artists data
 	artistsURL := "https://groupietrackers.herokuapp.com/api/artists"
 	var artists []help.Artists
@@ -525,16 +445,12 @@ func Relation(w http.ResponseWriter, r *http.Request) {
 		context := help.Context{
 			ErrorStruct: ErrMessage,
 		}
-		w.WriteHeader(500)
-
 		RenderTemplate(w, "error", "base", context)
 		return
 	}
-
 	// Process data and render template
 	n := relationData.ID - 1
 	artist := artists[n]
-
 	context := help.Context{
 		Artists:       artists,
 		RelationData:  relationData,
@@ -542,6 +458,5 @@ func Relation(w http.ResponseWriter, r *http.Request) {
 		Image:         artist.Image,
 		Name:          artist.Name,
 	}
-
 	RenderTemplate(w, "relation", "base", context)
 }

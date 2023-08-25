@@ -10,6 +10,7 @@ func main() {
 	port := ":8080"
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handler.Home)
+	mux.HandleFunc("/artists/", handler.Artists)
 	mux.HandleFunc("/about/", handler.About)
 	mux.HandleFunc("/dates/", handler.Dates)
 	mux.HandleFunc("/locations/", handler.Locations)

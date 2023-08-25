@@ -288,6 +288,9 @@ body {
 /* Styling for the about header section */
 .about-header {
   padding: 80px 0;
+  background-image: url('path/to/netflix-background.jpg');
+  background-size: cover;
+  background-position: center;
   text-align: center;
 }
 .about-header h1 {
@@ -486,7 +489,7 @@ body {
 #button-container {
   margin: 0;
   padding: 0;
-  background-image: url('https://github.com/ialim0/groupie-tracker/blob/master/dj_-_5180%20(540p).mp4');
+  background-image: url('https://github.com/ialim0/groupie-tracker/blob/master/music.mp4?raw=true');
   background-size: 60%;
   background-position: center;
   background-repeat: no-repeat;
